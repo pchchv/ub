@@ -32,6 +32,10 @@ func getEnvValue(v string) string {
 	return value
 }
 
+func createUser(jsonMap map[string]interface{}) (*User, error) {
+	return nil, nil
+}
+
 func main() {
 	server()
 }
