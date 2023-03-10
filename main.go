@@ -39,6 +39,11 @@ func hashPassword(password string) (string, error) {
 	return string(bytes), err
 }
 
+func checkPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
+
 func createUser(jsonMap map[string]interface{}) (*User, error) {
 	var err error
 	user := new(User)
