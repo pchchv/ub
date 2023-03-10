@@ -18,6 +18,8 @@ type User struct {
 	Balance  float64
 }
 
+var testURL string
+
 func init() {
 	// Load values from .env into the system
 	if err := godotenv.Load(); err != nil {
