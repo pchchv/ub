@@ -3,9 +3,18 @@ package main
 import (
 	"os"
 
+	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"github.com/pchchv/golog"
 )
+
+type User struct {
+	Id       uuid.UUID
+	Name     string
+	Email    string
+	PassHash string
+	Balance  float64
+}
 
 func init() {
 	// Load values from .env into the system
