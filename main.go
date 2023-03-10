@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"github.com/pchchv/golog"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -30,6 +31,11 @@ func getEnvValue(v string) string {
 		golog.Panic("Value %v does not exist", v)
 	}
 	return value
+}
+
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
 }
 
 func createUser(jsonMap map[string]interface{}) (*User, error) {
