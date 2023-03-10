@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/google/uuid"
@@ -39,7 +40,21 @@ func hashPassword(password string) (string, error) {
 }
 
 func createUser(jsonMap map[string]interface{}) (*User, error) {
-	return nil, nil
+	var err error
+	user := new(User)
+
+	user.Id = uuid.New()
+	user.Name = fmt.Sprint(jsonMap["name"])
+	user.Email = fmt.Sprint(jsonMap["email"])
+	user.PassHash, err = hashPassword(fmt.Sprint(jsonMap["password"]))
+	if err != nil {
+		return nil, err
+	}
+	user.Balance = 0
+
+	// TODO: Add a user to the database
+
+	return user, nil
 }
 
 func main() {
