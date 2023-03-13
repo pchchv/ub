@@ -91,6 +91,7 @@ func updateBalance(jsonMap map[string]interface{}) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	switch operation {
 	case "deposit":
 		user.Balance += amount
@@ -117,7 +118,10 @@ func deleteUser(id uuid.UUID) error {
 func getUser(id string) (User, error) {
 	var user User
 
-	// TODO: Get user data from the database
+	err := conn.QueryRow(context.Background(), "select user from users where id=$1", id).Scan(&user)
+	if err != nil {
+		return user, err
+	}
 
 	return user, nil
 }
