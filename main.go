@@ -64,6 +64,11 @@ func createUser(jsonMap map[string]interface{}) (*User, error) {
 	return user, nil
 }
 
+func updateBalance(jsonMap map[string]interface{}) (User, error) {
+	var user User
+	return user, nil
+}
+
 func main() {
 	server()
 }
