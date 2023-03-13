@@ -75,21 +75,16 @@ func createUser(jsonMap map[string]interface{}) (*User, error) {
 	return user, nil
 }
 
-func updateBalance(jsonMap map[string]interface{}) (*User, error) {
-	user := new(User)
-	id, err := uuid.Parse(fmt.Sprint(jsonMap["id"]))
-	if err != nil {
-		return nil, err
-	}
+func updateBalance(jsonMap map[string]interface{}) (User, error) {
+	id := fmt.Sprint(jsonMap["id"])
 	operation := fmt.Sprint(jsonMap["operation"]) // deposit or withdrawal
+	user, err := getUser(id)
+	if err != nil {
+		return user, err
+	}
 	amount, err := strconv.ParseFloat(fmt.Sprint(jsonMap["amount"]), 64)
 	if err != nil {
-		return nil, err
-	}
-
-	err = conn.QueryRow(context.Background(), "select user from users where id=$1", id).Scan(&user)
-	if err != nil {
-		return nil, err
+		return user, err
 	}
 
 	switch operation {
@@ -101,7 +96,7 @@ func updateBalance(jsonMap map[string]interface{}) (*User, error) {
 
 	_, err = conn.Exec(context.Background(), "update users set balance=$1 where id=$2", user.Balance, user.Id)
 	if err != nil {
-		return nil, err
+		return user, err
 	}
 
 	return user, nil
