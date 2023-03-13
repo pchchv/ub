@@ -61,7 +61,7 @@ go test .
 ```json
 {
     "id" : "sadf54-fdsa48-dsaf459-dsaf45",
-	"operation" : "Deposit",
+	"operation" : "deposit",
 	"amount" : 175.5
 }
 ```

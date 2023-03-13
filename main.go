@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -74,15 +75,31 @@ func createUser(jsonMap map[string]interface{}) (*User, error) {
 	return user, nil
 }
 
-func updateBalance(jsonMap map[string]interface{}) (User, error) {
-	var user User
-	_ = fmt.Sprint(jsonMap["id"])
-	_ = fmt.Sprint(jsonMap["operation"]) // Deposit or withdrawal
-	_ = fmt.Sprint(jsonMap["amount"])
+func updateBalance(jsonMap map[string]interface{}) (*User, error) {
+	user := new(User)
+	id, err := uuid.Parse(fmt.Sprint(jsonMap["id"]))
+	if err != nil {
+		return nil, err
+	}
+	operation := fmt.Sprint(jsonMap["operation"]) // deposit or withdrawal
+	amount, err := strconv.ParseFloat(fmt.Sprint(jsonMap["amount"]), 64)
+	if err != nil {
+		return nil, err
+	}
 
-	// TODO: Retrieve user data from the database by ID
-	//       Update user balance
-	//       Load the updated user data into the database
+	err = conn.QueryRow(context.Background(), "select user from users where id=$1", id).Scan(&user)
+	if err != nil {
+		return nil, err
+	}
+	switch operation {
+	case "deposit":
+		user.Balance += amount
+	case "withdrawal":
+		user.Balance -= amount
+	}
+
+	// TODO: Insert the updated user data into the database
+
 	return user, nil
 }
 
