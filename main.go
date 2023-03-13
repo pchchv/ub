@@ -118,7 +118,12 @@ func deleteUser(id uuid.UUID) error {
 func getUser(id string) (User, error) {
 	var user User
 
-	err := conn.QueryRow(context.Background(), "select user from users where id=$1", id).Scan(&user)
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		return user, err
+	}
+
+	err = conn.QueryRow(context.Background(), "select user from users where id=$1", uid).Scan(&user)
 	if err != nil {
 		return user, err
 	}
