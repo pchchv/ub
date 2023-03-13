@@ -98,7 +98,10 @@ func updateBalance(jsonMap map[string]interface{}) (*User, error) {
 		user.Balance -= amount
 	}
 
-	// TODO: Insert the updated user data into the database
+	_, err = conn.Exec(context.Background(), "update users set balance=$1 where id=$2", user.Balance, user.Id)
+	if err != nil {
+		return nil, err
+	}
 
 	return user, nil
 }
