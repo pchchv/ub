@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 	"github.com/pchchv/golog"
 	"golang.org/x/crypto/bcrypt"
@@ -18,7 +20,10 @@ type User struct {
 	Balance  float64
 }
 
-var testURL string
+var (
+	testURL string
+	conn    *pgx.Conn
+)
 
 func init() {
 	// Load values from .env into the system
@@ -50,7 +55,6 @@ func createUser(jsonMap map[string]interface{}) (*User, error) {
 	var err error
 	user := new(User)
 
-	user.Id = uuid.New()
 	user.Name = fmt.Sprint(jsonMap["name"])
 	user.Email = fmt.Sprint(jsonMap["email"])
 	user.PassHash, err = hashPassword(fmt.Sprint(jsonMap["password"]))
@@ -59,7 +63,13 @@ func createUser(jsonMap map[string]interface{}) (*User, error) {
 	}
 	user.Balance = 0
 
-	// TODO: Add a user to the database
+	row := conn.QueryRow(context.Background(),
+		"INSERT INTO users (name, email, password, balance) VALUES ($1, $2, $3, $4) RETURNING id",
+		user.Name, user.Email, user.PassHash, user.Balance)
+	err = row.Scan(&user.Id)
+	if err != nil {
+		return nil, fmt.Errorf("Unable to INSERT: %v\n", err)
+	}
 
 	return user, nil
 }
