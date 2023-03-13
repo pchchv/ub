@@ -82,6 +82,14 @@ func deleteUser(id string) error {
 	return nil
 }
 
+func getUser(id string) (User, error) {
+	var user User
+
+	// TODO: Get user data from the database
+
+	return user, nil
+}
+
 func main() {
 	server()
 }

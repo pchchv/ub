@@ -47,10 +47,20 @@ func deleteUserHandler(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
+func getUserHandler(c echo.Context) error {
+	id := c.QueryParam("id")
+	user, err := getUser(id)
+	if err != nil {
+		return c.String(http.StatusUnprocessableEntity, err.Error())
+	}
+	return c.JSON(http.StatusOK, user)
+}
+
 // The declaration of all routes comes from it
 func routes(e *echo.Echo) {
 	e.GET("/", pingHandler)
 	e.GET("/ping", pingHandler)
+	e.GET("/user", getUserHandler)
 	e.POST("/user", createUserHandler)
 	e.PATCH("/balance", updateBalanceHandler)
 	e.DELETE("/user", deleteUserHandler)
