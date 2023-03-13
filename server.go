@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/pchchv/golog"
@@ -39,8 +40,11 @@ func updateBalanceHandler(c echo.Context) error {
 }
 
 func deleteUserHandler(c echo.Context) error {
-	id := c.QueryParam("id")
-	err := deleteUser(id)
+	id, err := uuid.Parse(c.QueryParam("id"))
+	if err != nil {
+		return c.String(http.StatusUnprocessableEntity, err.Error())
+	}
+	err = deleteUser(id)
 	if err != nil {
 		return c.String(http.StatusUnprocessableEntity, err.Error())
 	}

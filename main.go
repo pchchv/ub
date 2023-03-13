@@ -86,9 +86,11 @@ func updateBalance(jsonMap map[string]interface{}) (User, error) {
 	return user, nil
 }
 
-func deleteUser(id string) error {
-	// TODO: Dlete user from the database
-
+func deleteUser(id uuid.UUID) error {
+	_, err := conn.Exec(context.Background(), "DELETE FROM users WHERE id = $1", id)
+	if err != nil {
+		return fmt.Errorf("Unable to DELETE: %v\n", err)
+	}
 	return nil
 }
 
