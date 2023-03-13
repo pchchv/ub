@@ -91,5 +91,6 @@ func getUser(id string) (User, error) {
 }
 
 func main() {
+	db()
 	server()
 }
