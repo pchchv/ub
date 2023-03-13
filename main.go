@@ -76,6 +76,12 @@ func updateBalance(jsonMap map[string]interface{}) (User, error) {
 	return user, nil
 }
 
+func deleteUser(id string) error {
+	// TODO: Dlete user from the database
+
+	return nil
+}
+
 func main() {
 	server()
 }
