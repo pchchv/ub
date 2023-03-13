@@ -66,6 +66,13 @@ func createUser(jsonMap map[string]interface{}) (*User, error) {
 
 func updateBalance(jsonMap map[string]interface{}) (User, error) {
 	var user User
+	_ = fmt.Sprint(jsonMap["id"])
+	_ = fmt.Sprint(jsonMap["operation"]) // Deposit or withdrawal
+	_ = fmt.Sprint(jsonMap["amount"])
+
+	// TODO: Retrieve user data from the database by ID
+	//       Update user balance
+	//       Load the updated user data into the database
 	return user, nil
 }
 
