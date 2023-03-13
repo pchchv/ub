@@ -29,6 +29,15 @@ go test .
     example: 
         "GET" :8080/ping
 ```
+```
+"GET" /user — Get a user data
+
+    options:
+        id — User ID
+
+    example: 
+        "GET" :8080/user?id=sadf54-fdsa48-dsaf459-dsaf45
+```
 
 ```
 "POST" /user — Create a new user. Need JSON body
@@ -59,6 +68,7 @@ go test .
 
 ```
 "DELETE" /user — Delete one User
+
     options:
         id — User ID
 
