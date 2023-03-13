@@ -17,7 +17,7 @@ func pingHandler(c echo.Context) error {
 func createUserHandler(c echo.Context) error {
 	var jsonMap map[string]interface{}
 	if err := c.Bind(&jsonMap); err != nil {
-		return err
+		return c.String(http.StatusUnprocessableEntity, err.Error())
 	}
 	user, err := createUser(jsonMap)
 	if err != nil {
